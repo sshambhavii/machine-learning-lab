@@ -1,0 +1,35 @@
+Lab 2 - 09/08/2023
+
+Question 13 - How many records are present in the dataset? Print the metadata information of the dataset.
+df.info()
+df.shape
+
+
+Question 14 - Draw a bar plot to show the number of persons having CHD or not in comparison to they having family history of the disease or not.
+import matplotlib.pyplot as plt
+import seaborn as sn
+famhist_chd_comparison = pd.crosstab(df['famhist'], df['chd'])
+barplot = famhist_chd_comparison.plot(kind='bar')
+
+
+Question 19 - Find out the number of CHD cases in different age categories. Do a barplot and sort them in the order of age groups.
+agegroups = []
+i = 0
+for i in range(len(df)):
+    if df['age'][i] <= 15:
+        agegroups.append('young')
+    elif df['age'][i] <= 35:
+        agegroups.append('adults')
+    elif df['age'][i] <= 55:
+        agegroups.append('mid')
+    else:
+        agegroups.append('old')
+
+df['agegroup'] = agegroups 
+df.head(20)
+
+sn.barplot(x=df['agegroup'],y=df['chd'],order=['young','adults','mid','old'])
+
+
+Question 20 - Draw a box plot to compare distributions of ldl for different age groups.
+sn.boxplot(x=df['agegroup'],y=df['ldl'],order=['young','adults','mid','old'])

@@ -1,0 +1,62 @@
+import pandas as pd 
+import numpy as np
+import math
+from scipy import stats
+
+#Question 2
+a) 1-stats.binom.cdf(3,8,.42)
+Output: 0.4526588403106562
+
+b) stats.binom.pmf(4,8,.42)
+Output: 0.2464944673605121
+
+#Question 4
+a) 1-stats.norm.cdf(50,loc=38,scale=5)
+Output: 0.008197535924596155
+
+b) stats.norm.cdf(10,loc=38,scale=5) Output: 1.0717590258310887e-08
+
+c) stats.norm.cdf(60,38,5)-stats.norm.cdf(30,38,5) Output: 0.9451952957565343
+
+#Question 6
+fabric_dataset=[19, 21, 23, 20, 22, 24, 18, 21, 23, 19,
+ 21, 23, 20, 22, 24, 18, 21, 23, 19, 21,
+ 23, 20, 22, 27, 18, 21, 23, 19, 21, 27,
+ 24, 52, 24, 48, 21, 23, 19, 21, 43, 20,
+ 22, 44, 18, 21, 23, 19, 41, 23, 40, 22,
+ 24, 18, 21, 42, 19, 21, 23, 20, 22, 24,
+ 18, 21, 23, 19, 21, 31, 20, 22, 30, 58,
+ 21, 23, 19, 21, 23, 20, 22, 24, 18, 32,
+ 51, 44, 21, 23, 20, 22, 24, 20, 21, 23]
+
+print(sum(fabric_dataset)/100)
+stats.ttest_1samp(fabric_dataset,18)
+
+Output: 22.0
+TtestResult(statistic=7.290817913679969, pvalue=1.2071796903914925e-10, df=89)
+
+#p values for random standard deviations
+for x in range(2,10):
+    print(stats.t.sf(abs(((22-18)*10)/x),df=99))
+Output: 7.532224297300853e-37
+3.928315748492499e-24
+5.469878503996061e-17
+1.2001519105284406e-12
+7.506144504985082e-10
+5.8165292946033945e-08
+1.2406980065204744e-06
+1.1511028863573263e-05
+
+#Question 8
+df=pd.read_csv('trainingscores.csv',index_col='Student')
+df.head()
+df.info()
+df.drop(df[df['Score Before Training']=='WC'].index,axis=0,inplace=True)
+#Paired Sample t-test
+stats.ttest_rel(df['Score Before Training'],df['Score After Training'])
+Output: TtestResult(statistic=-1.7364326497851257, pvalue=0.09347987807999415, df=28)
+
+
+
+
+

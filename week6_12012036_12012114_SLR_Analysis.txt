@@ -1,0 +1,80 @@
+6.4
+
+Analysis-1
+
+Leverage value gives one outlier while z-score & cook's distance give no outlier. Therefor we create a new df by removing the 12th observation and compare the r2-squared value.
+value_to_remove = 22.5
+df2= df2[df2['fashion_prod'] != value_to_remove]
+X_new=sm.add_constant(df2['fashion_prod'])
+Y_new=df2['Savings']
+train_X_new, test_X_new, train_y_new, test_y_new = train_test_split(X_new,Y_new,train_size = 0.8, random_state = 100)
+savings_lm_new=sm.OLS(train_y_new,train_X_new).fit()
+print(savings_lm.params)
+print(savings_lm_new.params)
+predicted=savings_lm_new.predict(X_new)
+Output:
+const          -8.720007
+fashion_prod    1.057888
+dtype: float64
+const          -8.563966
+fashion_prod    0.991719
+dtype: float64
+print(savings_lm.summary2())
+print(savings_lm_new.summary2())
+
+Output:
+                 Results: Ordinary least squares
+=================================================================
+Model:              OLS              Adj. R-squared:     0.563   
+Dependent Variable: Savings          AIC:                185.2187
+Date:               2023-09-13 15:52 BIC:                187.8831
+No. Observations:   28               Log-Likelihood:     -90.609 
+Df Model:           1                F-statistic:        35.74   
+Df Residuals:       26               Prob (F-statistic): 2.60e-06
+R-squared:          0.579            Scale:              40.786  
+-----------------------------------------------------------------
+                  Coef.  Std.Err.    t    P>|t|   [0.025   0.975]
+-----------------------------------------------------------------
+const            -8.7200   1.8283 -4.7695 0.0001 -12.4781 -4.9619
+fashion_prod      1.0579   0.1769  5.9787 0.0000   0.6942  1.4216
+-----------------------------------------------------------------
+Omnibus:              13.766       Durbin-Watson:          2.509 
+Prob(Omnibus):        0.001        Jarque-Bera (JB):       14.348
+Skew:                 -1.294       Prob(JB):               0.001 
+Kurtosis:             5.366        Condition No.:          16    
+=================================================================
+
+                 Results: Ordinary least squares
+=================================================================
+Model:              OLS              Adj. R-squared:     0.482   
+Dependent Variable: Savings          AIC:                179.4540
+Date:               2023-09-13 15:52 BIC:                182.0457
+No. Observations:   27               Log-Likelihood:     -87.727 
+Df Model:           1                F-statistic:        25.20   
+Df Residuals:       25               Prob (F-statistic): 3.54e-05
+R-squared:          0.502            Scale:              41.988  
+-----------------------------------------------------------------
+                  Coef.  Std.Err.    t    P>|t|   [0.025   0.975]
+-----------------------------------------------------------------
+const            -8.5640   1.8542 -4.6187 0.0001 -12.3827 -4.7452
+fashion_prod      0.9917   0.1976  5.0195 0.0000   0.5848  1.3986
+-----------------------------------------------------------------
+Omnibus:              13.069       Durbin-Watson:          2.570 
+Prob(Omnibus):        0.001        Jarque-Bera (JB):       13.353
+Skew:                 -1.233       Prob(JB):               0.001 
+Kurtosis:             5.405        Condition No.:          14    
+=================================================================
+
+
+We observe that the r-squared value decreases.
+
+
+Analysis-2
+
+we change the value of the 12th observation 
+i/p variable to 12.5 
+o/p variable to 11.2
+
+Using the new values, we use 0.8 of the dataset as training set. There are no outliers being given by any of the methods. 
+
+Now, with these new input and output variable we use 0.99 of the dataset as the training dataset and see that still no outliers are being thrown by any of the 3 methods. This indicates there was no issue with the splitting of the dataset but rather there was an actual outlier itself within the input features.

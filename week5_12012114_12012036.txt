@@ -1,0 +1,62 @@
+import numpy as np
+import pandas as pd
+
+#Step-1
+df=np.array([(4,10),(18,39),(20,42),(5,8),(7,13)])
+
+def PCA(X , num_components):
+
+    X_meaned = X - np.mean(X , axis = 0)
+     
+    cov_mat = np.cov(X_meaned , rowvar = False)
+     
+    eigen_values , eigen_vectors = np.linalg.eigh(cov_mat)
+    print(f'Eigenvalues:\n {eigen_values}\n')
+    print(f'EigenVectors:\n {eigen_vectors}\n')
+     
+    eigenvector_subset = eigen_vectors[:,0:num_components]
+     
+    X_reduced = np.dot(eigenvector_subset.transpose() , X_meaned.transpose() ).transpose()
+     
+    return X_reduced
+
+print(PCA(df,2))
+
+#Output
+Eigenvalues:
+ [  0.48424476 334.51575524]
+
+EigenVectors:
+ [[-0.91033593  0.41387014]
+ [ 0.41387014  0.91033593]]
+
+Transformed points:
+[[  1.05829452 -14.1024825 ]
+ [  0.31582571  18.09144146]
+ [ -0.26323571  21.65018954]
+ [ -0.67978169 -15.50928421]
+ [ -0.43110283 -10.12986428]]
+
+#Step-2
+cust_df=pd.read_csv("cust2.csv")
+selected_cols=cust_df[['Ec-products','Stationary','fashion_prod','other_shopping']]
+selected_cols.to_csv('new_cust2.csv',index=False)
+new_cust_df=pd.read_csv('new_cust2.csv')
+
+cust_array=new_cust_df.to_numpy()
+output_array=PCA(cust_array,4)
+
+col_names=['Ec-products','Stationary','fashion_prod','other_shopping']
+df=pd.DataFrame(output_array,columns=col_names)
+csv_file_path='cust2_output.csv'
+df.to_csv(csv_file_path,index=False)
+
+#Output
+Eigenvalues:
+ [9.82330954e-03 2.44864582e+00 2.43154334e+01 4.32390263e+01]
+
+EigenVectors:
+ [[ 0.73074882 -0.67141936 -0.07932931 -0.09438785]
+ [-0.67641194 -0.71762928 -0.16559956  0.00720288]
+ [ 0.07152343 -0.06668509  0.04008717  0.99439958]
+ [ 0.05794347  0.1725032  -0.98217955  0.04699507]]
